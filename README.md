@@ -1,4 +1,4 @@
-# afriscouts
+# Afriscouts
 
 A new Flutter project for Afriscouts mobile
 
