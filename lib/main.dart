@@ -7,6 +7,7 @@ import 'package:afriscouts/screens/search_screen.dart';
 import 'package:afriscouts/screens/signin_screen.dart';
 import 'package:afriscouts/screens/splash_screen.dart';
 import 'package:afriscouts/screens/settings_screen.dart';
+import 'package:afriscouts/screens/welcome_screen.dart';
 
 void main() {
   runApp(MyApp());
@@ -34,7 +35,7 @@ class MyApp extends StatelessWidget {
           // closer together (more dense) than on mobile platforms.
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
-        initialRoute: HomeScreen.id,
+        initialRoute: WelcomeScreen.id,
         routes: {
           HomeScreen.id: (context) => HomeScreen(),
           BookmarksScreen.id: (context) => BookmarksScreen(),
