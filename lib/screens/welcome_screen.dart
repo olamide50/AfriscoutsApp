@@ -9,17 +9,18 @@ class WelcomeScreen extends StatefulWidget {
 }
 
 class _WelcomeScreenState extends State<WelcomeScreen> {
+
   @override
   Widget build(BuildContext context) {
     return new SplashScreen(
       seconds: 8,
       navigateAfterSeconds: new AfterSplash(),
       title: new Text(
-        'Welcome In SplashScreen',
+        '',
         style: new TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
       ),
-      image: new Image.network(
-          'https://flutter.io/images/catalog-widget-placeholder.png'),
+      
+      imageBackground: AssetImage('assets/images/splash_image.png'),
       backgroundColor: Colors.white,
       loaderColor: Colors.red,
     );
