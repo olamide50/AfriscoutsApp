@@ -11,12 +11,11 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Home")),
-      body: SafeArea(
-        child: Container(
-          margin: EdgeInsets.all(20.0),
-          
-        )
-      ));
+        appBar: AppBar(title: Text("Home")),
+        body: SafeArea(
+            child: Container(
+                margin: EdgeInsets.all(20.0),
+                child: Text('Under Development',
+                    style: TextStyle(fontSize: 40)))));
   }
 }
