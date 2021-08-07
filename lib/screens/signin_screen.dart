@@ -1,11 +1,11 @@
-import 'package:afriscouts/screens/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_login_template/flutter_login_template.dart';
 import 'package:afriscouts/screens/user_auth/login_signin.dart';
 import 'package:afriscouts/screens/user_auth/login_signup.dart';
 import 'package:afriscouts/screens/user_auth/login_confirm.dart';
 import 'package:afriscouts/screens/user_auth/login_forgot.dart';
-import 'package:afriscouts/screens/user_auth/login_complete_reg.dart';
+
+// import 'package:afriscouts/services/network.dart';
 
 class SignInScreen extends StatefulWidget {
   static const id = 'signin_screen';
@@ -50,12 +50,7 @@ class _SignInScreenState extends State<SignInScreen> {
   @override
   Widget build(BuildContext context) {
     var signInPage = LoginPage(
-      onPressedSignIn: () {
-        setState(() {
-          Navigator.push(
-              context, MaterialPageRoute(builder: (context) => HomeScreen()));
-        });
-      },
+      onPressedSignIn: () {},
       onPressedSignUp: () {
         setState(() {
           state = _State.signUp;
@@ -87,15 +82,7 @@ class _SignInScreenState extends State<SignInScreen> {
       });
     });
 
-    var confirmCodePage = ConfirmRegistration(
-      onPressedNext: () {
-        setState(() {
-          Navigator.push(context,
-              MaterialPageRoute(builder: (context) => CreateProfilePage()));
-        });
-      },
-      onPressedResend: () {},
-    );
+    var confirmCodePage = ConfirmRegistration();
 
     Widget userUnboarding;
     switch (state) {

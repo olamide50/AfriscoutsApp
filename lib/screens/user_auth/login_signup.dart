@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:afriscouts/const/custom.dart';
+import 'package:afriscouts/services/network.dart';
+import 'package:afriscouts/screens/user_auth/login_confirm.dart';
+import 'dart:convert';
 
 class SignUpPage extends StatefulWidget {
   final Function() onPressedSignIn;
@@ -53,6 +56,23 @@ class SignUpPage extends StatefulWidget {
 }
 
 class _SignUpPageState extends State<SignUpPage> {
+  final passwordController = TextEditingController();
+  final usernameController = TextEditingController();
+  final emailController = TextEditingController();
+  final rollnameController = TextEditingController();
+  int response;
+  var data;
+
+  @override
+  void dispose() {
+    // Clean up the controller when the widget is disposed.
+    usernameController.dispose();
+    passwordController.dispose();
+    emailController.dispose();
+    rollnameController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -90,6 +110,7 @@ class _SignUpPageState extends State<SignUpPage> {
               color: Colors.white54,
             ),
             child: AfriTextField(
+              myController: usernameController,
               borderRadiusValue: widget.borderRadiusValue,
               hintText: widget.hintTextUsername,
               textFieldColor: widget.textFieldColor,
@@ -102,6 +123,7 @@ class _SignUpPageState extends State<SignUpPage> {
               color: Colors.white54,
             ),
             child: AfriTextField(
+              myController: passwordController,
               borderRadiusValue: widget.borderRadiusValue,
               hintText: widget.hintTextPassword,
               textFieldColor: widget.textFieldColor,
@@ -114,6 +136,7 @@ class _SignUpPageState extends State<SignUpPage> {
               color: Colors.white54,
             ),
             child: AfriTextField(
+              myController: emailController,
               borderRadiusValue: widget.borderRadiusValue,
               hintText: widget.hintTextEmail,
               textFieldColor: widget.textFieldColor,
@@ -126,6 +149,7 @@ class _SignUpPageState extends State<SignUpPage> {
               color: Colors.white54,
             ),
             child: AfriTextField(
+              myController: rollnameController,
               borderRadiusValue: widget.borderRadiusValue,
               hintText: widget.hintTextRoleName,
               textFieldColor: widget.textFieldColor,
@@ -137,7 +161,26 @@ class _SignUpPageState extends State<SignUpPage> {
                 constraints: BoxConstraints.tightFor(width: 310, height: 50),
                 child: AfriElevatedButton(
                   borderRadiusValue: widget.borderRadiusValue,
-                  onPressed: widget.onPressedSignUp,
+                  onPressed: () {
+                    setState(() async {
+                      data = await registerUser(
+                          usernameController.text,
+                          passwordController.text,
+                          emailController.text,
+                          rollnameController.text);
+                      response = int.parse(User().getData(data));
+
+                      if (response == 200 || response == 500) {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => ConfirmRegistration()));
+                      } else {
+                        ScaffoldMessenger.of(context)
+                            .showSnackBar(regErrorsnackBar);
+                      }
+                    });
+                  },
                   loginText: widget.signupText,
                   textColor: widget.signupColor,
                 ),

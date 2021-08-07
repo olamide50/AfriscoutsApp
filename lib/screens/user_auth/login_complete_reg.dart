@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:afriscouts/const/custom.dart';
-import 'package:afriscouts/screens/home_screen.dart';
 
 class CreateProfilePage extends StatefulWidget {
   /// The text of SignIn button.
@@ -46,6 +45,29 @@ class CreateProfilePage extends StatefulWidget {
 }
 
 class _CreateProfilePageState extends State<CreateProfilePage> {
+  final firstnameController = TextEditingController();
+  final lastnameController = TextEditingController();
+  final passwordController = TextEditingController();
+  final othernameController = TextEditingController();
+  final dateOfBirthController = TextEditingController();
+  final careerHistoryController = TextEditingController();
+  final heightController = TextEditingController();
+  final countryController = TextEditingController();
+
+  @override
+  void dispose() {
+    // Clean up the controller when the widget is disposed.
+    firstnameController.dispose();
+    lastnameController.dispose();
+    passwordController.dispose();
+    othernameController.dispose();
+    dateOfBirthController.dispose();
+    careerHistoryController.dispose();
+    heightController.dispose();
+    countryController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -63,6 +85,7 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
                   color: Colors.white54,
                 ),
                 child: AfriTextField(
+                  myController: firstnameController,
                   borderRadiusValue: widget.borderRadiusValue,
                   hintText: widget.hintFirstName,
                   textFieldColor: widget.textFieldColor,
@@ -75,6 +98,7 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
                   color: Colors.white54,
                 ),
                 child: AfriTextField(
+                  myController: lastnameController,
                   borderRadiusValue: widget.borderRadiusValue,
                   hintText: widget.hintLastName,
                   textFieldColor: widget.textFieldColor,
@@ -87,6 +111,7 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
                   color: Colors.white54,
                 ),
                 child: AfriTextField(
+                  myController: passwordController,
                   borderRadiusValue: widget.borderRadiusValue,
                   hintText: widget.hintOtherNames,
                   textFieldColor: widget.textFieldColor,
@@ -99,6 +124,7 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
                   color: Colors.white54,
                 ),
                 child: AfriTextField(
+                  myController: othernameController,
                   borderRadiusValue: widget.borderRadiusValue,
                   hintText: widget.hintDateOfBirth,
                   textFieldColor: widget.textFieldColor,
@@ -111,6 +137,7 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
                   color: Colors.white54,
                 ),
                 child: AfriTextField(
+                  myController: dateOfBirthController,
                   borderRadiusValue: widget.borderRadiusValue,
                   hintText: widget.hintProfession,
                   textFieldColor: widget.textFieldColor,
@@ -123,6 +150,7 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
                   color: Colors.white54,
                 ),
                 child: AfriTextField(
+                  myController: heightController,
                   borderRadiusValue: widget.borderRadiusValue,
                   hintText: widget.hintHeight,
                   textFieldColor: widget.textFieldColor,
@@ -135,6 +163,7 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
                   color: Colors.white54,
                 ),
                 child: AfriTextField(
+                  myController: countryController,
                   borderRadiusValue: widget.borderRadiusValue,
                   hintText: widget.hintCountryOfResidence,
                   textFieldColor: widget.textFieldColor,
@@ -147,6 +176,7 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
                   color: Colors.white54,
                 ),
                 child: AfriTextField(
+                  myController: careerHistoryController,
                   borderRadiusValue: widget.borderRadiusValue,
                   hintText: widget.hintCareerHistory,
                   textFieldColor: widget.textFieldColor,
@@ -160,10 +190,12 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
                     child: AfriElevatedButton(
                       borderRadiusValue: widget.borderRadiusValue,
                       onPressed: () {
-                        Navigator.push(
+                        /*  Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => HomeScreen()));
+                                builder: (context) => HomeScreen(
+                                  
+                                ))); */
                       },
                       loginText: widget.buttonTextSubmit,
                       textColor: widget.submitColor,

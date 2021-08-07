@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:afriscouts/const/custom.dart';
+import 'package:afriscouts/services/network.dart';
+import 'package:afriscouts/screens/home_screen.dart';
 
 class LoginPage extends StatefulWidget {
+  //Arguments
   static const id = 'login_page';
 
   /// The action of SignIn button.
@@ -56,6 +59,26 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  final usernameController = TextEditingController();
+  final passwordController = TextEditingController();
+  var data;
+  String token;
+  bool spin = false;
+
+  @override
+  void initState() {
+    super.initState();
+    // createToken(passwordController.text, usernameController.text);
+  }
+
+  @override
+  void dispose() {
+    // Clean up the controller when the widget is disposed.
+    usernameController.dispose();
+    passwordController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -92,6 +115,7 @@ class _LoginPageState extends State<LoginPage> {
               color: Colors.white54,
             ),
             child: AfriTextField(
+              myController: usernameController,
               borderRadiusValue: widget.borderRadiusValue,
               hintText: widget.hintTextUsername,
               textFieldColor: widget.textFieldColor,
@@ -104,6 +128,7 @@ class _LoginPageState extends State<LoginPage> {
               color: Colors.white54,
             ),
             child: AfriTextField(
+              myController: passwordController,
               borderRadiusValue: widget.borderRadiusValue,
               hintText: widget.hintTextPassword,
               textFieldColor: widget.textFieldColor,
@@ -115,7 +140,21 @@ class _LoginPageState extends State<LoginPage> {
                 constraints: BoxConstraints.tightFor(width: 310, height: 50),
                 child: AfriElevatedButton(
                   borderRadiusValue: widget.borderRadiusValue,
-                  onPressed: widget.onPressedSignIn,
+                  onPressed: () {
+                    setState(() {
+                      spin = true;
+                    });
+                    setState(() async {
+                                            data = await createToken(
+                          usernameController.text, passwordController.text);
+                      token = Token().getData(data);
+                      spin = false;
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => HomeScreen(token: token)));
+                    });
+                  },
                   loginText: widget.loginText,
                   textColor: widget.signinColor,
                 ),
@@ -133,6 +172,10 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               ),
             ),
+          ),
+          Container(
+            color: Colors.white,
+            child: (spin) ? spinkit : null,
           )
         ]),
       ),

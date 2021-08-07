@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 final signinColor = const Color(0xFF2E2C2C);
 final textFieldColor = const Color(0xFFFFFFFE);
@@ -9,11 +10,13 @@ class AfriTextField extends StatefulWidget {
   final double borderRadiusValue;
   final String hintText;
   final Color textFieldColor;
+  final myController;
 
   const AfriTextField({
     @required this.borderRadiusValue,
     @required this.hintText,
     @required this.textFieldColor,
+    @required this.myController,
   });
 
   _AfriTextFieldState createState() => _AfriTextFieldState();
@@ -31,6 +34,7 @@ class _AfriTextFieldState extends State<AfriTextField> {
           hintStyle: TextStyle(color: Colors.grey[800]),
           hintText: widget.hintText,
           fillColor: widget.textFieldColor),
+      controller: widget.myController,
     );
   }
 }
@@ -70,3 +74,10 @@ class _AfriElevatedButtonState extends State<AfriElevatedButton> {
     );
   }
 }
+
+const spinkit = SpinKitThreeBounce(
+  color: Colors.blue,
+  size: 50.0,
+);
+
+final regErrorsnackBar = SnackBar(content: Text('Error creating user!'));

@@ -3,6 +3,11 @@ import 'package:flutter/material.dart';
 class HomeScreen extends StatefulWidget {
   static const id = 'home_screen';
 
+  //Arguments
+  final token;
+
+  HomeScreen({@required this.token});
+
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }

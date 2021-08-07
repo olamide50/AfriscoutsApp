@@ -1,20 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:afriscouts/const/custom.dart';
+import 'package:afriscouts/screens/user_auth/login_complete_reg.dart';
 
 class ConfirmRegistration extends StatefulWidget {
-  final Function onPressedNext;
-  final Function onPressedResend;
-
-  const ConfirmRegistration({
-    @required this.onPressedNext,
-    @required this.onPressedResend,
-  });
-
   @override
   _ConfirmRegistrationState createState() => _ConfirmRegistrationState();
 }
 
 class _ConfirmRegistrationState extends State<ConfirmRegistration> {
+  final otpController = TextEditingController();
+
+  @override
+  void dispose() {
+    // Clean up the controller when the widget is disposed.
+    otpController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -25,6 +27,7 @@ class _ConfirmRegistrationState extends State<ConfirmRegistration> {
                 'Enter the 6 digit one Time password (OTP) sent to your email and press the submit button'),
             SizedBox(height: 20),
             AfriTextField(
+              myController: otpController,
               borderRadiusValue: 25.0,
               hintText: 'Enter OTP',
               textFieldColor: textFieldColor,
@@ -36,7 +39,14 @@ class _ConfirmRegistrationState extends State<ConfirmRegistration> {
                   constraints: BoxConstraints.tightFor(width: 310, height: 50),
                   child: AfriElevatedButton(
                     borderRadiusValue: borderRadiusValue,
-                    onPressed: widget.onPressedNext,
+                    onPressed: () {
+                      setState(() {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => CreateProfilePage()));
+                      });
+                    },
                     loginText: loginText,
                     textColor: signinColor,
                   ),
@@ -48,7 +58,7 @@ class _ConfirmRegistrationState extends State<ConfirmRegistration> {
                 child: ConstrainedBox(
                   constraints: BoxConstraints.tightFor(width: 310, height: 50),
                   child: TextButton(
-                    onPressed: widget.onPressedResend,
+                    onPressed: () {},
                     child: Text('Resend OTP',
                         style: TextStyle(fontWeight: FontWeight.bold)),
                   ),

@@ -21,7 +21,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
       ),
       imageBackground: AssetImage('assets/images/splash_image.png'),
       backgroundColor: Colors.white,
-      loaderColor: Colors.red,
+      useLoader: false,
     );
   }
 }

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:afriscouts/screens/home_screen.dart';
 import 'package:afriscouts/screens/bookmarks_screen.dart';
 import 'package:afriscouts/screens/profile_screen.dart';
 import 'package:afriscouts/screens/registration_screen.dart';
@@ -18,6 +17,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
         title: 'Afriscouts',
         theme: ThemeData(
           primarySwatch: Colors.blue,
@@ -26,7 +26,6 @@ class MyApp extends StatelessWidget {
         ),
         initialRoute: WelcomeScreen.id,
         routes: {
-          HomeScreen.id: (context) => HomeScreen(),
           WelcomeScreen.id: (context) => WelcomeScreen(),
           BookmarksScreen.id: (context) => BookmarksScreen(),
           ProfileScreen.id: (context) => ProfileScreen(),
