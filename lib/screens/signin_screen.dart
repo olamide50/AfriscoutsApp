@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_login_template/flutter_login_template.dart';
 import 'package:afriscouts/screens/user_auth/login_signin.dart';
 import 'package:afriscouts/screens/user_auth/login_signup.dart';
-import 'package:afriscouts/screens/user_auth/login_confirm.dart';
 import 'package:afriscouts/screens/user_auth/login_forgot.dart';
 
 // import 'package:afriscouts/services/network.dart';
@@ -82,7 +81,7 @@ class _SignInScreenState extends State<SignInScreen> {
       });
     });
 
-    var confirmCodePage = ConfirmRegistration();
+    
 
     Widget userUnboarding;
     switch (state) {
@@ -92,9 +91,7 @@ class _SignInScreenState extends State<SignInScreen> {
       case _State.forgot:
         userUnboarding = forgotPasswordPage;
         break;
-      case _State.confirm:
-        userUnboarding = confirmCodePage;
-        break;
+
       case _State.signIn:
       default:
         userUnboarding = signInPage;

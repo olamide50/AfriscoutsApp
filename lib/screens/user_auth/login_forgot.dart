@@ -13,10 +13,9 @@ class ForgotPasswordPage extends StatefulWidget {
 }
 
 class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
-
   final emailController = TextEditingController();
 
-@override
+  @override
   void dispose() {
     // Clean up the controller when the widget is disposed.
     emailController.dispose();
@@ -32,6 +31,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
             Text('Enter your email and press the submit button'),
             SizedBox(height: 20),
             AfriTextField(
+              hideText: false,
               myController: emailController,
               borderRadiusValue: 25.0,
               hintText: 'Email',
@@ -51,7 +51,6 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                 ),
               ),
             ),
-            
           ],
         ));
   }
