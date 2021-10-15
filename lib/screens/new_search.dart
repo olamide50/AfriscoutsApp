@@ -5,12 +5,8 @@ class NewSearch extends StatefulWidget {
   static String id = 'Search';
   static String headerText = 'Search';
 
-  
   final String query;
-  NewSearch({
- 
-    this.query
-  });
+  NewSearch({this.query});
   @override
   _NewSearchState createState() => _NewSearchState();
 }
@@ -81,6 +77,7 @@ class _NewSearchState extends State<NewSearch> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
+          foregroundColor: Colors.orange[600],
           leading: IconButton(
             icon: FaIcon(FontAwesomeIcons.times),
             onPressed: () {
@@ -115,8 +112,7 @@ class _NewSearchState extends State<NewSearch> {
                   style: TextStyle(color: Colors.white70, fontSize: 18.0)),
               onPressed: () {
                 querySearch = searchController.text;
-                _selectedUrl =
-                    'url';
+                _selectedUrl = 'url';
                 isLoading = true;
                 _search(_selectedUrl);
               },

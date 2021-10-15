@@ -2,11 +2,104 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
+import 'package:afriscouts/screens/bookmarks_screen.dart';
+import 'package:afriscouts/screens/settings_screen.dart';
+import 'package:user_profile_avatar/user_profile_avatar.dart';
+import 'package:afriscouts/screens/signin_screen.dart';
 
 final signinColor = const Color(0xFF2E2C2C);
 final textFieldColor = const Color(0xFFFFFFFE);
 final borderRadiusValue = 25.0;
 final loginText = 'Submit';
+
+class MenuScreen extends StatefulWidget {
+  @override
+  _MenuScreenState createState() => _MenuScreenState();
+}
+
+class _MenuScreenState extends State<MenuScreen> {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: Drawer(
+        child: ListView(
+          // Important: Remove any padding from the ListView.
+          padding: EdgeInsets.zero,
+          children: <Widget>[
+            Container(
+              height: 300.0,
+              child: DrawerHeader(
+                padding: EdgeInsets.zero,
+                child: Padding(
+                    padding: EdgeInsets.fromLTRB(10.0, 20.0, 0.0, 0.0),
+                    child: Column(
+                      children: [
+                        UserProfileAvatar(
+                          avatarUrl:
+                              'http://richardandbell.com/images/user-avatar-big-01.jpg',
+                          onAvatarTap: () {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text('Tapped on avatar'),
+                              ),
+                            );
+                          },
+                          notificationBubbleTextStyle: TextStyle(
+                            fontSize: 30,
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          avatarSplashColor: Colors.purple,
+                          radius: 60,
+                          isActivityIndicatorSmall: false,
+                          avatarBorderData: AvatarBorderData(
+                            borderColor: Colors.redAccent,
+                            borderWidth: 5.0,
+                          ),
+                        ),
+                        /* SizedBox(height: 2.0),
+                    Text('Display picture', style: TextStyle(fontSize: 12.0)) */
+                        TextButton(
+                          child: Text('Logout'),
+                          onPressed: () {
+                            Navigator.popAndPushNamed(context, SignInScreen.id);
+                          },
+                        )
+                      ],
+                    )),
+                decoration: BoxDecoration(
+                  color: Colors.blue,
+                ),
+              ),
+            ),
+            SizedBox(height: 20.0),
+            CustomFlatButton(
+              text: 'Bookmarks',
+              onTap: () {
+                Navigator.popAndPushNamed(context, BookmarksScreen.id);
+              },
+              icon: FaIcon(
+                FontAwesomeIcons.star,
+                color: Colors.yellow,
+              ),
+            ),
+            SizedBox(height: 20.0),
+            CustomFlatButton(
+              text: 'Settings',
+              onTap: () {
+                Navigator.popAndPushNamed(context, SettingsScreen.id);
+              },
+              icon: FaIcon(
+                FontAwesomeIcons.cog,
+                color: Colors.black,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
 
 class AppBarText extends StatelessWidget {
   AppBarText({@required this.title});
@@ -50,7 +143,6 @@ class _AfriTextFieldState extends State<AfriTextField> {
   @override
   Widget build(BuildContext context) {
     return TextField(
-      
       autofocus: false,
       obscureText: widget.hideText,
       keyboardType: widget.inputType,
@@ -96,10 +188,11 @@ class _AfriElevatedButtonState extends State<AfriElevatedButton> {
             borderRadius:
                 BorderRadius.all(Radius.circular(widget.borderRadiusValue)),
           )),
-          backgroundColor: MaterialStateProperty.all(Colors.blue[400]),
+          backgroundColor: MaterialStateProperty.all(Colors.orange[600]),
           padding: MaterialStateProperty.all(EdgeInsets.all(10)),
           textStyle: MaterialStateProperty.all(
               TextStyle(fontSize: 20, color: widget.textColor))),
+      
     );
   }
 }

@@ -6,3 +6,7 @@ final String registrationURL =
 
 final String authenticateUserURL =
     'http://134.209.73.94:8080/afriscout-api/login/authenticate';
+
+final String otpURL = 'http://134.209.73.94:8080/afriscout-api/otp/generate/';
+
+final String valOtpURL = 'http://134.209.73.94:8080/afriscout-api/otp/validate';

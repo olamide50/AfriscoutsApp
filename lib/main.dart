@@ -9,6 +9,9 @@ import 'package:afriscouts/screens/settings_screen.dart';
 import 'package:afriscouts/screens/welcome_screen.dart';
 import 'package:preferences/preferences.dart';
 import 'package:dynamic_theme/dynamic_theme.dart';
+import 'package:afriscouts/screens/user_auth/login_signin.dart';
+import 'package:afriscouts/screens/user_auth/login_forgot.dart';
+import 'package:afriscouts/screens/user_auth/login_signup.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -30,8 +33,9 @@ class MyApp extends StatelessWidget {
     return DynamicTheme(
         defaultBrightness: Brightness.light,
         data: (brightness) => new ThemeData(
-              primarySwatch: Colors.indigo,
+              primarySwatch: Colors.orange,
               brightness: brightness,
+              canvasColor: Colors.white,
             ),
         themedWidgetBuilder: (context, theme) {
           return MaterialApp(
@@ -48,6 +52,9 @@ class MyApp extends StatelessWidget {
                 SettingsScreen.id: (context) => SettingsScreen(),
                 SplashScreen.id: (context) => SplashScreen(),
                 RegistrationScreen.id: (context) => RegistrationScreen(),
+                LoginPage.id: (context) => LoginPage(),
+                ForgotPasswordPage.id: (context) => ForgotPasswordPage(),
+                SignUpPage.id: (context) => SignUpPage(),
               });
         });
   }

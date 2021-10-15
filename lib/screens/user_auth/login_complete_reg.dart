@@ -1,18 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:afriscouts/const/custom.dart';
+import 'package:country_picker/country_picker.dart';
 
 class CreateProfilePage extends StatefulWidget {
   /// The text of SignIn button.
-  final String hintFirstName;
-  final String hintLastName;
-  final String hintOtherNames;
-  final String userID;
-  final String hintDateOfBirth;
-  final String hintProfession;
-  final String hintHeight;
-  final String hintCountryOfResidence;
-  final String hintCareerHistory;
-  final String modByTs;
+  final String userid;
+  final String username;
+  final String email;
+  final String password;
 
   /// The text of SignUp button.
   final String buttonTextSubmit;
@@ -25,16 +20,10 @@ class CreateProfilePage extends StatefulWidget {
 
   const CreateProfilePage({
     this.buttonTextSubmit = 'Submit',
-    this.hintFirstName = 'First Name',
-    this.hintLastName = 'Last Name',
-    this.hintOtherNames = 'Other Names',
-    this.userID = 'User',
-    this.hintDateOfBirth = 'Date of Birth',
-    this.hintProfession = 'Profession',
-    this.hintHeight = 'Height',
-    this.hintCountryOfResidence = 'Country',
-    this.hintCareerHistory = ' Career Summary',
-    this.modByTs = '',
+    this.userid,
+    this.username,
+    this.email,
+    this.password,
     this.submitColor = const Color(0xFF2E2C2C),
     this.textFieldColor = const Color(0xFFFFFFFE),
     this.borderRadiusValue = 25.0,
@@ -45,27 +34,36 @@ class CreateProfilePage extends StatefulWidget {
 }
 
 class _CreateProfilePageState extends State<CreateProfilePage> {
-  final firstnameController = TextEditingController();
-  final lastnameController = TextEditingController();
-  final passwordController = TextEditingController();
-  final othernameController = TextEditingController();
-  final dateOfBirthController = TextEditingController();
-  final careerHistoryController = TextEditingController();
-  final heightController = TextEditingController();
-  final countryController = TextEditingController();
+  String firstname,
+      lastname,
+      password,
+      othername,
+      dateOfBirth,
+      careerHistory,
+      height,
+      country,
+      _country = "Select Country",
+      profession,
+      modByTs = "No";
 
-  @override
-  void dispose() {
-    // Clean up the controller when the widget is disposed.
-    firstnameController.dispose();
-    lastnameController.dispose();
-    passwordController.dispose();
-    othernameController.dispose();
-    dateOfBirthController.dispose();
-    careerHistoryController.dispose();
-    heightController.dispose();
-    countryController.dispose();
-    super.dispose();
+  DateTime selectedDate = DateTime.now();
+  int day, month, year;
+  String _dob = "Select Date of Birth";
+  Future<void> _selectedDate(BuildContext context) async {
+    final DateTime picked = await showDatePicker(
+        context: context,
+        initialDate: selectedDate,
+        firstDate: DateTime(2015, 8),
+        lastDate: DateTime(2101));
+    if (picked != null && picked != selectedDate)
+      setState(() {
+        selectedDate = picked;
+        day = picked.day;
+        month = picked.month;
+        year = picked.year;
+        _dob = '$month/$day/$year';
+        dateOfBirth = selectedDate.toString();
+      });
   }
 
   @override
@@ -84,11 +82,22 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
                 decoration: BoxDecoration(
                   color: Colors.white54,
                 ),
-                child: AfriTextField(
-                  myController: firstnameController,
-                  borderRadiusValue: widget.borderRadiusValue,
-                  hintText: widget.hintFirstName,
-                  textFieldColor: widget.textFieldColor,
+                child: TextField(
+                  onChanged: (value) {
+                    firstname = value;
+                  },
+                  autofocus: false,
+                  obscureText: false,
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(
+                      borderRadius:
+                          BorderRadius.circular(widget.borderRadiusValue),
+                    ),
+                    filled: true,
+                    hintStyle: TextStyle(color: Colors.grey[800]),
+                    hintText: 'Firstname*',
+                    fillColor: widget.textFieldColor,
+                  ),
                 ),
               ),
               Container(
@@ -97,11 +106,22 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
                 decoration: BoxDecoration(
                   color: Colors.white54,
                 ),
-                child: AfriTextField(
-                  myController: lastnameController,
-                  borderRadiusValue: widget.borderRadiusValue,
-                  hintText: widget.hintLastName,
-                  textFieldColor: widget.textFieldColor,
+                child: TextField(
+                  onChanged: (value) {
+                    lastname = value;
+                  },
+                  autofocus: false,
+                  obscureText: false,
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(
+                      borderRadius:
+                          BorderRadius.circular(widget.borderRadiusValue),
+                    ),
+                    filled: true,
+                    hintStyle: TextStyle(color: Colors.grey[800]),
+                    hintText: 'Lastname*',
+                    fillColor: widget.textFieldColor,
+                  ),
                 ),
               ),
               Container(
@@ -110,11 +130,22 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
                 decoration: BoxDecoration(
                   color: Colors.white54,
                 ),
-                child: AfriTextField(
-                  myController: passwordController,
-                  borderRadiusValue: widget.borderRadiusValue,
-                  hintText: widget.hintOtherNames,
-                  textFieldColor: widget.textFieldColor,
+                child: TextField(
+                  onChanged: (value) {
+                    othername = value;
+                  },
+                  autofocus: false,
+                  obscureText: false,
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(
+                      borderRadius:
+                          BorderRadius.circular(widget.borderRadiusValue),
+                    ),
+                    filled: true,
+                    hintStyle: TextStyle(color: Colors.grey[800]),
+                    hintText: 'Other names',
+                    fillColor: widget.textFieldColor,
+                  ),
                 ),
               ),
               Container(
@@ -123,11 +154,22 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
                 decoration: BoxDecoration(
                   color: Colors.white54,
                 ),
-                child: AfriTextField(
-                  myController: othernameController,
-                  borderRadiusValue: widget.borderRadiusValue,
-                  hintText: widget.hintDateOfBirth,
-                  textFieldColor: widget.textFieldColor,
+                child: TextField(
+                  onChanged: (value) {
+                    height = value;
+                  },
+                  autofocus: false,
+                  obscureText: false,
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(
+                      borderRadius:
+                          BorderRadius.circular(widget.borderRadiusValue),
+                    ),
+                    filled: true,
+                    hintStyle: TextStyle(color: Colors.grey[800]),
+                    hintText: 'Height*',
+                    fillColor: widget.textFieldColor,
+                  ),
                 ),
               ),
               Container(
@@ -136,11 +178,111 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
                 decoration: BoxDecoration(
                   color: Colors.white54,
                 ),
-                child: AfriTextField(
-                  myController: dateOfBirthController,
-                  borderRadiusValue: widget.borderRadiusValue,
-                  hintText: widget.hintProfession,
-                  textFieldColor: widget.textFieldColor,
+                child: TextField(
+                  onChanged: (value) {
+                    profession = value;
+                  },
+                  autofocus: false,
+                  obscureText: false,
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(
+                      borderRadius:
+                          BorderRadius.circular(widget.borderRadiusValue),
+                    ),
+                    filled: true,
+                    hintStyle: TextStyle(color: Colors.grey[800]),
+                    hintText: 'Profession*',
+                    fillColor: widget.textFieldColor,
+                  ),
+                ),
+              ),
+              Container(
+                  padding: EdgeInsets.only(
+                      top: 0, bottom: 25.0, right: 25.0, left: 25.0),
+                  height: 80.0,
+                  decoration: BoxDecoration(
+                    color: Colors.white54,
+                  ),
+                  child: FractionallySizedBox(
+                    alignment: Alignment.center,
+                    widthFactor: 1.0,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        side: BorderSide(
+                          width: 1.0,
+                          color: Colors.black,
+                        ),
+                        primary:
+                            Colors.white, //change background color of button
+                        onPrimary: Colors.black87, //change text color of button
+                        shape: RoundedRectangleBorder(
+                          borderRadius:
+                              BorderRadius.circular(widget.borderRadiusValue),
+                        ),
+                        elevation: 1.0,
+                      ),
+                      onPressed: () {
+                        showCountryPicker(
+                          context: context,
+                          showPhoneCode:
+                              false, // optional. Shows phone code before the country name.
+                          onSelect: (Country cont) {
+                            country = cont.name;
+                            setState(() {
+                              _country = country;
+                            });
+                          },
+                        );
+                      },
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Text(
+                            _country,
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w700,
+                              color: Colors.black,
+                            ),
+                          ),
+                          Icon(
+                            Icons.arrow_drop_down_outlined,
+                            color: Colors.black,
+                          )
+                        ],
+                      ),
+                    ),
+                  )),
+              Container(
+                padding: EdgeInsets.only(
+                    top: 0, bottom: 25.0, right: 25.0, left: 25.0),
+                /* decoration: BoxDecoration(
+                  color: Colors.white54,
+                ), */
+                child: TextField(
+                  onTap: () {
+                    
+                    setState(() {
+                      _selectedDate(context);
+                    });
+                  },
+                  controller: TextEditingController.fromValue(
+                      TextEditingValue(text: _dob)),
+                  onChanged: (value) {
+                    dateOfBirth = value;
+                  },
+                  autofocus: false,
+                  obscureText: false,
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(
+                      borderRadius:
+                          BorderRadius.circular(widget.borderRadiusValue),
+                    ),
+                    filled: true,
+                    hintStyle: TextStyle(color: Colors.grey[800]),
+                    hintText: "Date of Birth",
+                    fillColor: widget.textFieldColor,
+                  ),
                 ),
               ),
               Container(
@@ -149,37 +291,22 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
                 decoration: BoxDecoration(
                   color: Colors.white54,
                 ),
-                child: AfriTextField(
-                  myController: heightController,
-                  borderRadiusValue: widget.borderRadiusValue,
-                  hintText: widget.hintHeight,
-                  textFieldColor: widget.textFieldColor,
-                ),
-              ),
-              Container(
-                padding: EdgeInsets.only(
-                    top: 0, bottom: 25.0, right: 25.0, left: 25.0),
-                decoration: BoxDecoration(
-                  color: Colors.white54,
-                ),
-                child: AfriTextField(
-                  myController: countryController,
-                  borderRadiusValue: widget.borderRadiusValue,
-                  hintText: widget.hintCountryOfResidence,
-                  textFieldColor: widget.textFieldColor,
-                ),
-              ),
-              Container(
-                padding: EdgeInsets.only(
-                    top: 0, bottom: 25.0, right: 25.0, left: 25.0),
-                decoration: BoxDecoration(
-                  color: Colors.white54,
-                ),
-                child: AfriTextField(
-                  myController: careerHistoryController,
-                  borderRadiusValue: widget.borderRadiusValue,
-                  hintText: widget.hintCareerHistory,
-                  textFieldColor: widget.textFieldColor,
+                child: TextField(
+                  onChanged: (value) {
+                    careerHistory = value;
+                  },
+                  autofocus: false,
+                  obscureText: false,
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(
+                      borderRadius:
+                          BorderRadius.circular(widget.borderRadiusValue),
+                    ),
+                    filled: true,
+                    hintStyle: TextStyle(color: Colors.grey[800]),
+                    hintText: 'Career History',
+                    fillColor: widget.textFieldColor,
+                  ),
                 ),
               ),
               Container(
@@ -191,11 +318,15 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
                       borderRadiusValue: widget.borderRadiusValue,
                       onPressed: () {
                         /*  Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => HomeScreen(
-                                  
-                                ))); */
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => HomeScreen(
+                                            username: username,
+                                            email: email,
+                                            userid: userid,
+                                            status: status,
+                                            roleName: roleName,
+                                            token: eToken))); */
                       },
                       loginText: widget.buttonTextSubmit,
                       textColor: widget.submitColor,

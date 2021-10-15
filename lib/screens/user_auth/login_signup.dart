@@ -2,13 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:afriscouts/const/custom.dart';
 import 'package:afriscouts/services/network.dart';
 import 'package:afriscouts/screens/user_auth/login_confirm.dart';
-import 'package:afriscouts/const/const.dart';
 
 class SignUpPage extends StatefulWidget {
-  final Function() onPressedSignIn;
+  static const id = 'signupPage';
 
-  /// The action of SignUp button to navigate to [LoginTemplateSignUpPage]
-  final Function() onPressedSignUp;
+  final Function onPressedSignIn;
 
   /// The text of SignIn button.
   final String buttonTextSignIn;
@@ -37,14 +35,13 @@ class SignUpPage extends StatefulWidget {
   final double borderRadiusValue;
 
   const SignUpPage({
-    @required this.onPressedSignIn,
-    @required this.onPressedSignUp,
+    this.onPressedSignIn,
     this.buttonTextSignIn = 'Sign In',
     this.buttonTextSignUp = 'Sign Up',
-    this.hintTextUsername = 'User name',
+    this.hintTextUsername = 'Username',
     this.hintTextPassword = 'Password',
     this.hintTextEmail = 'Email',
-    this.hintTextRoleName = 'Athlete / Scout',
+    this.hintTextRoleName = 'Role',
     this.signupText = 'Submit',
     this.signupColor = const Color(0xFF2E2C2C),
     this.textFieldColor = const Color(0xFFFFFFFE),
@@ -56,54 +53,24 @@ class SignUpPage extends StatefulWidget {
 }
 
 class _SignUpPageState extends State<SignUpPage> {
-  final passwordController = TextEditingController();
-  final usernameController = TextEditingController();
-  final emailController = TextEditingController();
-  String rollnameController = 'Athlete';
-  String rollnameControllerText;
-  String response, status, message, userid, username, email, rolename;
+  String rolename = 'Select Role (Athlete)';
+  String response,
+      status,
+      message,
+      userid,
+      username,
+      email,
+      password,
+      rolenameText;
   var data;
   String errorMsg;
   bool con = true;
   String futureUser;
   List<String> user;
+  List result;
   User users = User();
+  Msg msg = Msg();
   bool _isObscure = true;
-
-  void _register() async {
-    try {
-      futureUser = await registerUser(
-          usernameController.text,
-          passwordController.text,
-          emailController.text,
-          rollnameControllerText);
-      if (futureUser == errorMessage) {
-        errorMsg = regErrorMessage;
-      } else if (futureUser == '400') {
-        errorMsg = userExistsError;
-      } else {
-        user = users.getData(futureUser);
-        status = user[0];
-        message = user[1];
-        userid = user[2];
-        username = user[3];
-        email = user[4];
-        rolename = user[5];
-      }
-    } catch (e) {
-      con = false;
-      errorMsg = e.toString();
-    }
-  }
-
-  @override
-  void dispose() {
-    // Clean up the controller when the widget is disposed.
-    usernameController.dispose();
-    passwordController.dispose();
-    emailController.dispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -111,7 +78,7 @@ class _SignUpPageState extends State<SignUpPage> {
       child: Container(
         padding: EdgeInsets.only(top: 50, right: 0, left: 5, bottom: 30),
         child: Column(children: <Widget>[
-          SizedBox(height: 30),
+          SizedBox(height: 85),
           Row(children: [
             Container(
               child: TextButton(
@@ -141,12 +108,22 @@ class _SignUpPageState extends State<SignUpPage> {
             decoration: BoxDecoration(
               color: Colors.white54,
             ),
-            child: AfriTextField(
-              hideText: false,
-              myController: usernameController,
-              borderRadiusValue: widget.borderRadiusValue,
-              hintText: widget.hintTextUsername,
-              textFieldColor: widget.textFieldColor,
+            child: TextField(
+              onChanged: (value) {
+                username = value;
+              },
+              autofocus: false,
+              obscureText: false,
+              // keyboardType: widget.inputType,
+              decoration: InputDecoration(
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(widget.borderRadiusValue),
+                ),
+                filled: true,
+                hintStyle: TextStyle(color: Colors.grey[800]),
+                hintText: widget.hintTextUsername,
+                fillColor: widget.textFieldColor,
+              ),
             ),
           ),
           Container(
@@ -155,21 +132,30 @@ class _SignUpPageState extends State<SignUpPage> {
             decoration: BoxDecoration(
               color: Colors.white54,
             ),
-            child: AfriTextField(
-              icon: IconButton(
-                  icon: Icon(
-                      _isObscure ? Icons.visibility : Icons.visibility_off),
-                  onPressed: () {
-                    setState(() {
-                      _isObscure = !_isObscure;
-                    });
-                  }),
-              // inputType: TextInputType.visiblePassword,
-              hideText: _isObscure,
-              myController: passwordController,
-              borderRadiusValue: widget.borderRadiusValue,
-              hintText: widget.hintTextPassword,
-              textFieldColor: widget.textFieldColor,
+            child: TextField(
+              onChanged: (value) {
+                password = value;
+              },
+              autofocus: false,
+              obscureText: _isObscure,
+              // keyboardType: widget.inputType,
+              decoration: InputDecoration(
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(widget.borderRadiusValue),
+                ),
+                filled: true,
+                hintStyle: TextStyle(color: Colors.grey[800]),
+                hintText: widget.hintTextPassword,
+                fillColor: widget.textFieldColor,
+                suffixIcon: IconButton(
+                    icon: Icon(
+                        _isObscure ? Icons.visibility : Icons.visibility_off),
+                    onPressed: () {
+                      setState(() {
+                        _isObscure = !_isObscure;
+                      });
+                    }),
+              ),
             ),
           ),
           Container(
@@ -178,13 +164,22 @@ class _SignUpPageState extends State<SignUpPage> {
             decoration: BoxDecoration(
               color: Colors.white54,
             ),
-            child: AfriTextField(
-              hideText: false,
-              inputType: TextInputType.emailAddress,
-              myController: emailController,
-              borderRadiusValue: widget.borderRadiusValue,
-              hintText: widget.hintTextEmail,
-              textFieldColor: widget.textFieldColor,
+            child: TextField(
+              onChanged: (value) {
+                email = value;
+              },
+              autofocus: false,
+              obscureText: false,
+              // keyboardType: widget.inputType,
+              decoration: InputDecoration(
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(widget.borderRadiusValue),
+                ),
+                filled: true,
+                hintStyle: TextStyle(color: Colors.grey[800]),
+                hintText: widget.hintTextEmail,
+                fillColor: widget.textFieldColor,
+              ),
             ),
           ),
           Container(
@@ -192,11 +187,12 @@ class _SignUpPageState extends State<SignUpPage> {
                 EdgeInsets.only(top: 0, bottom: 0, right: 25.00, left: 25.0),
             padding: EdgeInsets.only(top: 0, bottom: 5.0, right: 10.0, left: 0),
             decoration: ShapeDecoration(
+              color: Colors.white,
               shape: RoundedRectangleBorder(
                 side: BorderSide(
                   width: 1.0,
                   style: BorderStyle.solid,
-                  color: Colors.blue,
+                  color: Colors.grey[800],
                 ),
                 borderRadius: BorderRadius.all(Radius.circular(30.0)),
               ),
@@ -207,11 +203,12 @@ class _SignUpPageState extends State<SignUpPage> {
                 child: DropdownButton<String>(
                   isExpanded: true,
                   dropdownColor: widget.textFieldColor,
-                  value: rollnameController,
+                  value: rolename,
                   //elevation: 5,
                   style: TextStyle(color: Colors.white),
                   iconEnabledColor: Colors.black,
                   items: <String>[
+                    'Select Role (Athlete)',
                     'Athlete',
                     'Journalist',
                     'Scout',
@@ -233,13 +230,13 @@ class _SignUpPageState extends State<SignUpPage> {
                   ),
                   onChanged: (String value) {
                     setState(() {
-                      rollnameController = value;
-                      if (value == 'Athlete') {
-                        rollnameControllerText = 'ROLE_ATHLETE';
+                      rolename = value;
+                      if (value == 'Journalist') {
+                        rolenameText = 'ROLE_JOURNALISTS';
                       } else if (value == 'Scout') {
-                        rollnameControllerText = 'ROLE_SCOUT';
+                        rolenameText = 'ROLE_SCOUT';
                       } else {
-                        rollnameControllerText = 'ROLE_JOURNALISTS';
+                        rolenameText = 'ROLE_ATHLETE';
                       }
                     });
                   },
@@ -256,24 +253,42 @@ class _SignUpPageState extends State<SignUpPage> {
                 constraints: BoxConstraints.tightFor(width: 310, height: 50),
                 child: AfriElevatedButton(
                   borderRadiusValue: widget.borderRadiusValue,
-                  onPressed: () {
-                    setState(() {
-                      _register();
-                      if (con == true) {
+                  onPressed: () async {
+                    try {
+                      final newUser = await registerUser(
+                          username, password, email, rolenameText);
+                      print(newUser);
+                      result = msg.getData(newUser);
+                      status = result[0].toString();
+                      errorMsg = result[1].toString();
+                      if (status == '200') {
+                        result = users.getData(newUser);
+                        userid = result[2];
+                        username = result[3];
+                        email = result[4];
                         Navigator.push(
                             context,
                             MaterialPageRoute(
                                 builder: (context) => ConfirmRegistration(
-                                    username: username,
-                                    userid: userid,
-                                    email: email)));
+                                      username: username,
+                                      email: email,
+                                      userid: userid,
+                                      password: password,
+                                    )));
                       } else {
                         final regErrorsnackBar =
                             SnackBar(content: Text(errorMsg));
                         ScaffoldMessenger.of(context)
                             .showSnackBar(regErrorsnackBar);
                       }
-                    });
+                    } catch (e) {
+                      print(e.toString());
+                      errorMsg = 'User Registration Error!';
+                      final regErrorsnackBar =
+                          SnackBar(content: Text(errorMsg));
+                      ScaffoldMessenger.of(context)
+                          .showSnackBar(regErrorsnackBar);
+                    }
                   },
                   loginText: widget.signupText,
                   textColor: widget.signupColor,

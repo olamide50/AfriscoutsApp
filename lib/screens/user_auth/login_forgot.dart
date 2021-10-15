@@ -2,11 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:afriscouts/const/custom.dart';
 
 class ForgotPasswordPage extends StatefulWidget {
-  final Function onPressedNext;
-
-  const ForgotPasswordPage({
-    @required this.onPressedNext,
-  });
+  
+  static const id = 'forgot_password_page';
+  const ForgotPasswordPage();
 
   @override
   _ForgotPasswordPageState createState() => _ForgotPasswordPageState();
@@ -44,7 +42,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                   constraints: BoxConstraints.tightFor(width: 310, height: 50),
                   child: AfriElevatedButton(
                     borderRadiusValue: borderRadiusValue,
-                    onPressed: widget.onPressedNext,
+                    onPressed: (){},
                     loginText: loginText,
                     textColor: signinColor,
                   ),

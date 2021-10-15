@@ -84,13 +84,21 @@ class UserAuth {
 Future<String> registerUser(
     String username, String password, String email, String rollname) async {
   try {
-    final response = await http.post(Uri.parse(registrationURL), body: {
-      "password": "$password",
-      "username": "$username",
-      "rollName": "$rollname",
-      "email": "$email",
-      "status": 0,
-    });
+    final response = await http.post(
+      Uri.parse(registrationURL),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(
+        <String, String>{
+          "password": "$password",
+          "username": "$username",
+          "roleName": "$rollname",
+          "email": "$email",
+          "status": "0",
+        },
+      ),
+    );
 
     if (response.statusCode == 200 || response.statusCode == 500) {
       return response.body;
@@ -98,6 +106,7 @@ Future<String> registerUser(
       return response.statusCode.toString();
     }
   } catch (e) {
+    print(e);
     throw new HttpException(e);
   }
 }
@@ -110,13 +119,30 @@ class User {
     if (data != null) {
       var decoder = jsonDecode(data);
       print(decoder);
+      status = decoder['status'].toString();
+      message = decoder['message'].toString();
+      userid = decoder['result']['id'].toString();
+      username = decoder['result']['username'].toString();
+      email = decoder['result']['email'].toString();
+      rolename = decoder['result']['roleName'].toString();
+      return [status, message, userid, username, email, rolename];
+    } else {
+      return null;
+    }
+  }
+}
+
+class Msg {
+  var status, message;
+  Msg();
+  getData(var data) {
+    if (data != null) {
+      var decoder = jsonDecode(data);
+      print(decoder);
       status = decoder['status'];
       message = decoder['message'];
-      userid = decoder['result']['id'];
-      username = decoder['result']['username'];
-      email = decoder['result']['email'];
-      rolename = decoder['rolename']['roleName'];
-      return [status, message, userid, username, email, rolename];
+
+      return [status, message];
     } else {
       return null;
     }
@@ -125,7 +151,46 @@ class User {
 
 Future<String> genOTP(url) async {
   try {
-    final response = await http.get(url);
+    final response = await http.get(Uri.parse(url));
+
+    if (response.statusCode == 200) {
+      return response.body.toString();
+    } else {
+      return response.statusCode.toString();
+    }
+  } catch (e) {
+    throw new HttpException(e);
+  }
+}
+
+class OTP {
+  String token;
+
+  OTP();
+  getData(var data) {
+    if (data != null) {
+      var decoder = jsonDecode(data);
+      token = decoder['result']['token'].toString();
+      return token;
+    } else {
+      return null;
+    }
+  }
+}
+
+Future<String> valOTP(String email, String token, String username) async {
+  try {
+    final response = await http.post(
+      Uri.parse(valOtpURL),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, String>{
+        "username": "$username",
+        "token": "$token",
+        "email": "$email"
+      }),
+    );
 
     if (response.statusCode == 200) {
       return response.body;
@@ -137,41 +202,18 @@ Future<String> genOTP(url) async {
   }
 }
 
-class OTP {
-  var token;
+class CorrectOTP {
+  String valid;
 
-  OTP();
-  getData(var userid) {
-    if (userid != null) {
-      var decoder = jsonDecode(userid);
-      token = decoder['result'];
-      return token;
+  CorrectOTP();
+  getData(var data) {
+    if (data != null) {
+      var decoder = jsonDecode(data);
+      valid = decoder['result']['message'].toString();
+      print(valid);
+      return valid;
     } else {
       return null;
     }
-  }
-}
-
-Future<String> valOTP(String email, String token, String username) async {
-  try {
-    final response = await http.post(
-      Uri.parse(registrationURL),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
-      body: jsonEncode(<String, String>{
-        "username": "$username",
-        "token": "$token",
-        "email": "$email"
-      }),
-    );
-
-    if (response.statusCode == 200 || response.statusCode == 500) {
-      return response.body;
-    } else {
-      return response.statusCode.toString();
-    }
-  } catch (e) {
-    throw new HttpException(e);
   }
 }

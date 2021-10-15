@@ -49,15 +49,9 @@ class _SignInScreenState extends State<SignInScreen> {
   @override
   Widget build(BuildContext context) {
     var signInPage = LoginPage(
-      onPressedSignIn: () {},
       onPressedSignUp: () {
         setState(() {
           state = _State.signUp;
-        });
-      },
-      onPressedForgot: () {
-        setState(() {
-          state = _State.forgot;
         });
       },
     );
@@ -68,20 +62,9 @@ class _SignInScreenState extends State<SignInScreen> {
           state = _State.signIn;
         });
       },
-      onPressedSignUp: () {
-        setState(() {
-          state = _State.confirm;
-        });
-      },
     );
 
-    var forgotPasswordPage = ForgotPasswordPage(onPressedNext: () {
-      setState(() {
-        state = _State.signIn;
-      });
-    });
-
-    
+    var forgotPasswordPage = ForgotPasswordPage();
 
     Widget userUnboarding;
     switch (state) {
@@ -105,7 +88,7 @@ class _SignInScreenState extends State<SignInScreen> {
           decoration: BoxDecoration(
               image: DecorationImage(
                   fit: BoxFit.fill,
-                  image: AssetImage('assets/images/background.png'))),
+                  image: AssetImage('assets/images/icon.jpg'))),
           child: Scaffold(
               backgroundColor: Colors.transparent,
               body: SingleChildScrollView(

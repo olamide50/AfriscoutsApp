@@ -30,7 +30,20 @@ class _SettingsScreenState extends State<SettingsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: (AppBarText(title: SettingsScreen.headerText)),
+        elevation: 1,
+        leading: Container(
+            margin: const EdgeInsets.all(10.0),
+            child: IconButton(
+                icon: Icon(Icons.arrow_back, color: Colors.black),
+                onPressed: () {
+                  Navigator.pop(context);
+                })),
+        backgroundColor: Colors.white,
+        title: Text(
+          SettingsScreen.headerText,
+          style: TextStyle(color: Colors.black),
+        ),
+        centerTitle: true,
       ),
       body: PreferencePage([
         PreferenceTitle('Personalization'),

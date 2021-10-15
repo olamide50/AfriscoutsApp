@@ -2,20 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:afriscouts/const/custom.dart';
 import 'package:afriscouts/services/network.dart';
 import 'package:afriscouts/screens/home_screen.dart';
-import 'package:afriscouts/const/const.dart';
+import 'package:afriscouts/screens/user_auth/login_forgot.dart';
 
 class LoginPage extends StatefulWidget {
   //Arguments
   static const id = 'login_page';
 
-  /// The action of SignIn button.
-  final Function() onPressedSignIn;
-
-  /// The action of ForgotPassword button to navigate to [LoginTemplateForgotPasswordPage]
-  final Function() onPressedForgot;
-
-  /// The action of SignUp button to navigate to [LoginTemplateSignUpPage]
-  final Function() onPressedSignUp;
+  final Function onPressedSignUp;
 
   /// The text of SignIn button.
   final String buttonTextSignIn;
@@ -41,13 +34,11 @@ class LoginPage extends StatefulWidget {
   final double borderRadiusValue;
 
   const LoginPage({
-    @required this.onPressedSignIn,
-    @required this.onPressedForgot,
-    @required this.onPressedSignUp,
+    this.onPressedSignUp,
     this.buttonTextSignIn = 'Sign In',
     this.buttonTextSignUp = 'Sign Up',
     this.buttonTextForgotPassword = 'Forgot Password',
-    this.hintTextUsername = 'User name / Email',
+    this.hintTextUsername = 'Username',
     this.hintTextPassword = 'Password',
     this.loginText = 'Submit',
     this.signinColor = const Color(0xFF2E2C2C),
@@ -60,12 +51,9 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  final usernameController = TextEditingController();
-  final passwordController = TextEditingController();
-  var data;
-  String token;
   bool spin = false;
   bool _isObscure = true;
+  String eToken;
   String futureUser,
       errorMsg,
       userid,
@@ -78,54 +66,11 @@ class _LoginPageState extends State<LoginPage> {
       updatedBy;
   List user;
   UserAuth users = UserAuth();
+  Token userToken = Token();
 
   @override
   void initState() {
     super.initState();
-    // createToken(passwordController.text, usernameController.text);
-  }
-
-  @override
-  void dispose() {
-    // Clean up the controller when the widget is disposed.
-    usernameController.dispose();
-    passwordController.dispose();
-    super.dispose();
-  }
-
-  void _signIn(String username, String password) async {
-    try {
-      futureUser = await authenticateUser(username, password);
-      print(futureUser);
-      if (futureUser == errorMessage) {
-        errorMsg = 'Sign In Error';
-        final regErrorsnackBar = SnackBar(content: Text(errorMsg));
-        ScaffoldMessenger.of(context).showSnackBar(regErrorsnackBar);
-      } else {
-        user = users.getData(futureUser);
-        userid = user[0];
-        username = user[1];
-        email = user[2];
-        status = user[3];
-        email = user[4];
-        roleName = user[5];
-        updateAt = user[6];
-        updatedBy = user[7];
-        spin = false;
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => HomeScreen(
-                    username: username,
-                    email: email,
-                    userid: userid,
-                    status: status)));
-      }
-    } catch (e) {
-      //con = false;
-      errorMsg = 'Sign In Error!';
-      spin = false;
-    }
   }
 
   @override
@@ -221,7 +166,10 @@ class _LoginPageState extends State<LoginPage> {
                   borderRadiusValue: widget.borderRadiusValue,
                   onPressed: () async {
                     try {
-                      spin = true;
+                      setState(() {
+                        spin = true;
+                      });
+
                       final newUser =
                           await authenticateUser(username, password);
                       print(newUser);
@@ -234,6 +182,9 @@ class _LoginPageState extends State<LoginPage> {
                       updateAt = user[5].toString();
                       updatedBy = user[6].toString();
 
+                      final token = await createToken(username, password);
+                      eToken = userToken.getData(token);
+
                       Navigator.push(
                           context,
                           MaterialPageRoute(
@@ -241,17 +192,27 @@ class _LoginPageState extends State<LoginPage> {
                                   username: username,
                                   email: email,
                                   userid: userid,
-                                  status: status)));
+                                  status: status,
+                                  roleName: roleName,
+                                  token: eToken)));
 
                       /* setState(() {
                         spin = false;
                       }); */
                     } catch (e) {
-                      print(e);
+                      errorMsg = 'Sign In Error';
+                      final regErrorsnackBar =
+                          SnackBar(content: Text(errorMsg));
+                      ScaffoldMessenger.of(context)
+                          .showSnackBar(regErrorsnackBar);
+                      setState(() {
+                        spin = false;
+                      });
                     }
                   },
                   loginText: widget.loginText,
                   textColor: widget.signinColor,
+                  
                 ),
               ),
             ),
@@ -261,7 +222,9 @@ class _LoginPageState extends State<LoginPage> {
               child: ConstrainedBox(
                 constraints: BoxConstraints.tightFor(width: 310, height: 50),
                 child: TextButton(
-                  onPressed: widget.onPressedForgot,
+                  onPressed: () {
+                    Navigator.pushNamed(context, ForgotPasswordPage.id);
+                  },
                   child: Text('Forgot Password',
                       style: TextStyle(fontWeight: FontWeight.bold)),
                 ),
